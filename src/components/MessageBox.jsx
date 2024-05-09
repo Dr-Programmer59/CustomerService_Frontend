@@ -15,7 +15,30 @@ function MessageBox({ messages, typingAnimation, message, setmessage, handleSend
     const [userBankDetails, setUserBankDetails] = useState([]);
     const [adminBankDetails, setadminBankDetails] = useState({})
     const fileInputRef = useRef(null);
+const [disclaimer, setdisclaimer] = useState(false)
+const [disclaimerTitle, setdisclaimerTitle] = useState("")
+const [disclaimerMsg, setdisclaimerMsg] = useState("")
+const [currentTime, setCurrentTime] = useState(new Date());
 
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    setCurrentTime(new Date());
+  }, 1000);
+
+  // Cleanup function to clear the interval when the component unmounts
+  return () => clearInterval(intervalId);
+}, []); // Empty dependency array ensures the effect runs only once on mount
+
+const isBetween2PMAnd1130PM = () => {
+  const currentHours = currentTime.getHours();
+  const currentMinutes = currentTime.getMinutes();
+
+  return (
+    (currentHours === 14 && currentMinutes >= 0) || // 2:00 PM or later
+    (currentHours > 14 && currentHours < 23) || // Between 3 PM and 10:59 PM
+    (currentHours === 23 && currentMinutes <= 30) // 11:30 PM or earlier
+  );
+};
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
@@ -114,11 +137,17 @@ function MessageBox({ messages, typingAnimation, message, setmessage, handleSend
     const handleDeposit = () => {
         buttonPressHandle("option-deposit")
         setMessages((prev) => [...prev, { msg: "deposit", status: "options" ,}])
+        setdisclaimer(true)
+        setdisclaimerTitle("Disclaimer")
+
+        setdisclaimerMsg("More then 25000 amount must deposit to bank. thanks :)")
     }
 
     const handleWidthraw = () => {
         buttonPressHandle("option-widthraw")
         setMessages((prev) => [...prev, { msg: "widthraw", status: "options" }])
+       
+        
     }
 
     const handleWidthrawDetails = (name) => {
@@ -179,8 +208,10 @@ function MessageBox({ messages, typingAnimation, message, setmessage, handleSend
                     <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["option-create-id"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={HandleCrateId}>Create Id</button>
                     <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["option-deposit"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={handleDeposit}>Deposit</button>
 
-
+                            { isBetween2PMAnd1130PM()?
                     <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["option-widthraw"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={handleWidthraw}>Widthraw</button>
+                    :""
+                    }
                     <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["option-apk"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={handleApkids}>APK IDs</button>
 
 
@@ -259,7 +290,14 @@ function MessageBox({ messages, typingAnimation, message, setmessage, handleSend
 
     return (
         <div>
-
+        {
+            disclaimer?
+            <div class="bg-blue-100 border-t relative     left-0 border-b border-blue-500 text-blue-700 px-4 py-3 mb-5 mt-2" role="alert">
+            <p class="font-bold">{disclaimerTitle}</p>
+            <p class="text-sm">{disclaimerMsg}</p>
+            </div>:""
+        }
+          
             <div class="w-full px-5 flex flex-col justify-end">
                 <div class="h-[70vh] overflow-y-auto flex flex-col  mb-4">
 
