@@ -195,7 +195,7 @@ function page() {
       !loadingHide && 
       <div className='h-screen w-full bg-gradient absolute z-10 flex flex-col justify-center items-center gap-5'>
         <h2 className='text-white/80 text-3xl'>Hello I am Sundarbhai</h2>
-        <img src='/images/bot.png' className='w-16 h-16 rounded-full'/>
+        <img src='Images/bot.png' className='w-16 h-16 rounded-full'/>
         <h2 className='text-white/80 text-2xl'>How can i help you ?</h2>
         <button className='py-2 px-4 rounded-3xl bg-white text-[#330867]' onClick={() => setLoadingHide(true)}>Chat Now !</button>
       </div>
@@ -203,7 +203,7 @@ function page() {
       
       <div className='gradint p-3 rounded-t-md flex justify-between items-center shadow-md shadow-[#330867]'>
         <div className='flex gap-2 items-center'>
-          <img src='/images/bot.png' className='w-16 h-16 rounded-full'/>
+          <img src='Images/bot.png' className='w-16 h-16 rounded-full'/>
           <div className=''>
             <h1 className='text-white text-2xl'>Sundarbhai</h1>
             <p className='text-white/80'>we are online</p>

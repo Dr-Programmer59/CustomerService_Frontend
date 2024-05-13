@@ -18,7 +18,9 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux'
 import { login, register } from '@/lib/actions/user';
 import Signup from '@/app/signup/page';
+import Erorr from '@/components/Erorr';
 const initialFormData = {
+  profileImage:'',
   name: '',
   lastName: '',
   username: '',
@@ -40,8 +42,10 @@ const SimpleMultiStepForm = ({ showStepNumber }) => {
   const [step, setStep] = useState('A');
   const [formData, setFormData] = useState(initialFormData);
   const dispatch=useDispatch();
+  const [error, seterror] = useState(false)
   // We need a method to go to next step
   const handleNextStep = () => {
+    seterror(false)
     if (step === 'A') setStep('B');
     else if (step === 'B') setStep('C');
     else if (step === 'C') setStep('D');
@@ -49,6 +53,7 @@ const SimpleMultiStepForm = ({ showStepNumber }) => {
 
   // We need a method to go to prev step
   const handlePrevStep = () => {
+    seterror(false)
     if (step === 'D') setStep('C');
     else if (step === 'C') setStep('B');
     else if (step === 'B') setStep('A');
@@ -81,6 +86,13 @@ const SimpleMultiStepForm = ({ showStepNumber }) => {
       try {
       // Wait for the register function to complete 
       let res = await dispatch(register(formData));
+      if(res){
+        setStep('Final')
+      }
+      else{
+        seterror(true)
+
+      }
       } catch (error) {
         console.error('Error occurred during registration:', error);
       }
@@ -101,6 +113,7 @@ const SimpleMultiStepForm = ({ showStepNumber }) => {
     }
     return (
       <section className='mt-2 mb-4 flex justify-between'>
+       
         {stepsArray.map((item) => (
           <div
             key={item}
@@ -109,6 +122,7 @@ const SimpleMultiStepForm = ({ showStepNumber }) => {
             }`}
             onClick={() => setStep(item)}
           >
+            
             {item}
           </div>
         ))}
@@ -118,12 +132,17 @@ const SimpleMultiStepForm = ({ showStepNumber }) => {
 
   return (
     <div className='w-[600px] max-w-full px-6 py-1 mx-auto rounded-lg border-2 border-dotted border-sky-300'>
+      
       {renderTopStepNumbers()}
-
+      {
+          error?
+          <Erorr title={"Error"} message={"something went wrong :("}/>:""
+        }
       {/* // Render Steps */}
       {step === 'A' ? (
         <StepA
           formData={formData}
+          setFormData={setFormData}
           handleChangeInput={handleChangeInput}
           handleNextStep={handleNextStep}
         />
@@ -153,6 +172,7 @@ const SimpleMultiStepForm = ({ showStepNumber }) => {
         />
       ) : null}
       {step === 'Final' ? <StepFinal /> : null}
+      
     </div>
   );
 };

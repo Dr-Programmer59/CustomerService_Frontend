@@ -9,11 +9,13 @@ import MobileButtonNavigation from './leyout-sections/MobileButtonNavigation';
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '@/lib/actions/user';
 import { usePathname, useRouter } from 'next/navigation'
+import Erorr from '../Erorr';
 const MainLayout = ({ children }) => {
   const { open } = useContext(MenuContext);
   const { isAuth, user } = useSelector(store => store.userReducer);
   const router = useRouter();
   const pathname = usePathname();
+  const [isLogin, setisLogin] = useState(true)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,8 +33,14 @@ const MainLayout = ({ children }) => {
 
   const handleSubmit =async (e) => {
     e.preventDefault();
+
       let res = await dispatch(login(formData['email'], formData['password']));
-   
+      if(!res){
+        setisLogin(false)
+      }
+      else{
+        setisLogin    (true)
+      }
 
     // Handle form submission here
 
@@ -72,10 +80,16 @@ if (checkHideHeader()) {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up for an Admin Account</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign In</h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
+        {
+          isLogin==false?
+        <Erorr title={"Error"} message={"invalid Email or password"}/>
+          :""
+        }
+
+        <form className="mt-8 space-y-10" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm space-y-2">
             
             <div>
               <label htmlFor="email" className="sr-only">Email address</label>

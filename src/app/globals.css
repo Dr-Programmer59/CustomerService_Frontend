@@ -38,3 +38,7 @@ body {
 {
   background-image: linear-gradient(to right, #191714 , #2234AE);
 }
+img{
+  max-width: none !important;
+  
+}

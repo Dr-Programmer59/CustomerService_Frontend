@@ -205,7 +205,7 @@ const isBetween2PMAnd1130PM = () => {
             >
                 Choose
                 <div className='flex flex-col space-y-3 '>
-                    <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["option-create-id"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={HandleCrateId}>Create Id</button>
+                    <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["option-create-id"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={HandleCrateId}>Create Id </button>
                     <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["option-deposit"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={handleDeposit}>Deposit</button>
 
                             { isBetween2PMAnd1130PM()?
@@ -275,11 +275,23 @@ const isBetween2PMAnd1130PM = () => {
             >
                 Choose
                 <div className='flex flex-col space-y-3 '>
-                    <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["deposit-bank"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={() => { handleDepositDetails("bank"); buttonPressHandle("deposit-bank") }}>Bank</button>
-                    <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["deposit-jazzcash"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={() => { handleDepositDetails("jazzcash"); buttonPressHandle("deposit-jazzcash") }}>Jazzcash</button>
+                    <button type="button" class={`py-2 px-4 rounded-3xl  flex flex-row hover:bg-gradient hover:text-white transition-all ${buttonPress["deposit-bank"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={() => { handleDepositDetails("bank"); buttonPressHandle("deposit-bank") }}>
+                    <img src="Images/bank.png" alt="easypaisa" className='w-12 h-10' />
+                    
+                    <span >Bank</span>  
+                        </button>
+                    <button type="button" class={`py-2 px-4 rounded-3xl flex flex-row space-x-3 hover:bg-gradient hover:text-white transition-all ${buttonPress["deposit-jazzcash"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={() => { handleDepositDetails("jazzcash"); buttonPressHandle("deposit-jazzcash") }}> 
+                    <img src="Images/jazzcash.png" alt="easypaisa" className='w-10 h-8' />
+                    
+                    <span >Jazzcash</span> 
+                    </button>
 
 
-                    <button type="button" class={`py-2 px-4 rounded-3xl   hover:bg-gradient hover:text-white transition-all ${buttonPress["deposit-easypaisa"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={() => { handleDepositDetails("easypaisa"); buttonPressHandle("deposit-easypaisa") }}>Easypaisa</button>
+                    <button type="button" class={`py-2 px-4 rounded-3xl  flex flex-row  space-x-3  hover:bg-gradient hover:text-white transition-all ${buttonPress["deposit-easypaisa"] ? "bg-gradient text-white" : "border border-[#2234AE] text-[#2234AE]"}`} onClick={() => { handleDepositDetails("easypaisa"); buttonPressHandle("deposit-easypaisa") }}>
+                    <img src="Images/easypaisa.png" alt="easypaisa" className='w-10 h-10'/>
+
+                    <span>Easypaisa</span> 
+                        </button>
                 </div>
 
 
@@ -428,10 +440,10 @@ const isBetween2PMAnd1130PM = () => {
                 </div>
             </div>
             <div class="md:p-5  flex flex-row justify-center items-center space-x-4">
-                <div className='space-y-3  '>
+                <div className='space-y-3 relative  '>
                     {
-                        imageSrc && <div className='max-w-sm p-6 bg-gray-200 border absolute bottom-[120px] left-[20px]  border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-                            <img src={imageSrc} className='w-[15vh] h-40' alt="Selected" />
+                        imageSrc && <div className='  p-6 bg-gray-200 border absolute bottom-[90px] left-[10px]  border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
+                            <img src={imageSrc} className='w-50 h-40 ' alt="Selected" />
 
                         </div>
                     }
