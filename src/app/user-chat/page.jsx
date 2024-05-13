@@ -213,7 +213,7 @@ function page() {
       <div class="  shadow-lg  bg-white p-4">
   
   
-        <MessageBox messages={messages}  typingAnimation={typingAnimation} setMessages={setMessages}  message={message} setmessage={setmessage} handleSendMessage={handleSendMessage} audioBlob={audioBlob}  startRecording={startRecording} sendQuestions={sendQuestions} socket={socket} answers={answers} imageSrc={imageSrc} setImageSrc={setImageSrc} startBot={startBot} setstartBot={setstartBot}/>
+        <MessageBox messages={messages}  typingAnimation={typingAnimation} setMessages={setMessages}  message={message} setmessage={setmessage} handleSendMessage={handleSendMessage} audioBlob={audioBlob}  startRecording={startRecording} sendQuestions={sendQuestions} socket={socket} answers={answers} imageSrc={imageSrc} setImageSrc={setImageSrc} startBot={startBot} setstartBot={setstartBot} />
         
   
       </div>

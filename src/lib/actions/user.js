@@ -37,6 +37,8 @@ export const register = (formData) => async (dispatch) => {
         })
         console.log("This is form data",formData)
         const {data} = await api.post('/register',{name:formData['name'],email:formData['email'],password:formData['password'],category:formData['category']});
+        const {msgData} = await api.post(`/message/${data.user._id}`);
+        
         dispatch({
             type: RegisterUserSuc,...data
         })

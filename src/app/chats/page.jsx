@@ -3,6 +3,7 @@ import React, { useEffect, useState,useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import socket from '@/components/socket';
 import MessageBox from '@/components/MessageBox';
+import axios from 'axios';
 
 
 
@@ -12,6 +13,7 @@ function page() {
   const { isAuth, user } = useSelector(store => store.userReducer);
   useEffect(() => {
     console.log(user)
+    
     socket.emit("new-member", { name: user.name, category: user.category, socketId: socket.id, role: user.role })
 
 
@@ -27,8 +29,30 @@ function page() {
   const [typingAnimation, settypingAnimation] = useState(false)
   const [imageSrc, setImageSrc] = useState(null);
 
+  const getMessages=async()=>{
+    try{
+      let {data} = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/message/${user._id}`);
+      setmsginfo(data.message.customers)
+    }
+      catch(err){
+        console.log("there is some error ",err )
+      }
+  }
+  useEffect(() => {
+    getMessages()
+  
+    
+  }, [])
+  
   const audioRef = useRef(null);
-
+  const updateMessages=async (customerId,customerName,message)=>{
+    try{
+    let res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/message/${user._id}`,{customerId,customerName,message});
+    }
+    catch(err){
+      console.log("there is some error ",err )
+    }
+  }
   const startRecording = async () => {
     try {
       if(recording==false){
@@ -68,6 +92,7 @@ function page() {
             ...updatedMsgInfo[currentCustomer],
             messages: [...updatedMsgInfo[currentCustomer].messages, { msg: audioBlob.current, status: "outgoing",msgType:"audio"}]
           };
+          updateMessages(currentCustomer,user.name,{ msg: audioBlob.current, status: "outgoing",msgType:"audio"})
           return updatedMsgInfo;
         });
     
@@ -78,18 +103,23 @@ function page() {
     }
   };
 
+  const  getRandomFromArray=(array)=> {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+}
   
   const handleNewCustomer = (data) => {
     console.log("new customer came ", data);
 
     // Update state immutably
+
     setmsginfo(prevMsgInfo => {
       return {
         ...prevMsgInfo,
-        [data.socketId]: { customerIndex: data.customerIndex, messages: [] }
+        [data.socketId]: { customerName: data.name, messages: [] }
       };
     });
-
+    updateMessages(data.socketId,data.name,"")
     console.log(Object.entries(msginfo));
   }
   useEffect(() => {
@@ -127,8 +157,10 @@ function page() {
           ...updatedMsgInfo[currentCustomer],
           messages: [...updatedMsgInfo[currentCustomer].messages, { msg: message, status: "outgoing",msgType:"img",imageData:imageSrc }]
         };
+        updateMessages(currentCustomer,user.name, { msg: message, status: "outgoing",msgType:"img",imageData:imageSrc })
         return updatedMsgInfo;
       });
+      
     }
     else{
     socket.emit("send-msg", {
@@ -149,6 +181,7 @@ function page() {
         ...updatedMsgInfo[currentCustomer],
         messages: [...updatedMsgInfo[currentCustomer].messages, { msg: message, status: "outgoing" }]
       };
+      updateMessages(currentCustomer,user.name,{ msg: message, status: "outgoing" })
       return updatedMsgInfo;
     });
   }
@@ -166,15 +199,16 @@ function page() {
   
         const audioURL = URL.createObjectURL(audioBlob);
         updatedMsgInfo[data.socketId].messages.push({ msg: audioURL, status: "incoming",imageData:data.imageData,msgType:data.msgType });
-  
+        updateMessages(currentCustomer,data.name,{ msg: audioURL, status: "incoming",imageData:data.imageData,msgType:data.msgType })
       }
       else{
        updatedMsgInfo[data.socketId].messages.push({ msg: data.message, status: "incoming",imageData:data.imageData,msgType:data.msgType });
+       updateMessages(currentCustomer,data.name,{ msg: data.message, status: "incoming",imageData:data.imageData,msgType:data.msgType })
       }
      
       return updatedMsgInfo; 
     });
-
+  
 
   };
   return (
@@ -182,7 +216,7 @@ function page() {
       <div class="h-full w-full mx-auto shadow-lg rounded-lg ">
 
         <div class="px-5 py-5 flex justify-between items-center  bg-white border-b-2">
-          <div class="font-semibold text-2xl">GoingChat</div>
+          <div class="font-semibold text-2xl">SundarBhai chat</div>
           <div class="w-1/2">
             <input
               type="text"
@@ -194,7 +228,7 @@ function page() {
           </div>
           
           <div
-            class="h-12 w-12 p-2 bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center"
+            class={`h-12 w-12 p-2  ${getRandomFromArray(['bg-yellow-500','bg-green-500',"bg-red-500","bg-gray-500"])} rounded-full text-white font-semibold flex items-center justify-center`}
           >
             RA
           </div>
@@ -220,15 +254,14 @@ function page() {
                   class="flex flex-row py-4 px-2 justify-center items-center border-b-2"
                 >
                   <div class="w-1/4" data-key={key}>
-                    <img
-                      src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
-                      class="object-cover h-12 w-12 rounded-full"
-                      alt=""
-                      data-key={key}
-                    />
+                  <div
+            class={`h-12 w-12 p-2 bg-green-500 rounded-full text-white font-semibold flex items-center justify-center`}
+          >
+                    {value.customerName[0].toUpperCase()}
+                  </div>
                   </div>
                   <div class="w-full" data-key={key}>
-                    <div class="text-lg font-semibold" data-key={key}>{`customer ${value.customerIndex + 1}`}</div>
+                    <div class="text-lg font-semibold" data-key={key}>{value.customerName}</div>
                     {/* <span class="text-gray-500">Pick me at 9:00 Am</span> */}
                   </div>
 
