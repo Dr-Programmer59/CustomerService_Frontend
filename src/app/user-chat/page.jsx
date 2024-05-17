@@ -12,14 +12,14 @@ function page() {
   const [messages, setMessages] = useState([])
   const [message, setmessage] = useState("")
   const [recording, setRecording] = useState(false);
-  const [audioBlob, setAudioBlob] = useState(null);
-  const [mediaRecorder, setmediaRecorder] = useState(null);
   const [startBot, setstartBot] = useState(true)
   const [currentBotMsg, setcurrentBotMsg] = useState("")
   const [typingAnimation, settypingAnimation] = useState(false)
   const [loadingHide, setLoadingHide] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
-
+  const [phonenumber, setphonenumber] = useState("")
+  const [name, setname] = useState("")
+  const [userDetail, setuserDetail] = useState(null)
   const [customerDetails, setCustomerDetails] = useState({
     "name": "unknwon",
     "phone": "0000"
@@ -30,6 +30,8 @@ function page() {
   const [questionindex, setquestionindex] = useState(0);
   const [answers, setanswers] = useState("")
   const audioRef = useRef(null);
+  const audioBlob=useRef()
+  const mediaRecorder=useRef();
 
 
   useEffect(() => {
@@ -43,6 +45,28 @@ function page() {
     startBotChatting();
   }, []);
 
+
+ useEffect(() => {
+   const addMessage=async()=>{
+    try{
+      console.log("trying to add message")
+      let res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/customer/${userDetail._id}`,{message:messages[messages.length-1]});
+     
+      if(res){
+        console.log(res)
+      }
+
+    }
+    catch(err){
+      console.log(err)
+
+    }
+
+   }
+   addMessage();
+
+ }, [messages])
+ 
   const setTypeAnimationAndSendMessage = async (message, index, delay) => {
     setquestionindex(index)
     settypingAnimation(true);
@@ -52,6 +76,7 @@ function page() {
 
     setMessages((prev) => [...prev, { msg: message, status: "incoming" }]);
 
+    
     await wait(delay);
   };
 
@@ -98,9 +123,7 @@ function page() {
         socket.emit("send-msg", {
           message: audioBlob.current,
           socketId: socket.id,
-          category: user.category,
-          role: "employee",
-          customerSocket: currentCustomer,
+          role: "customer",
           msgType: "audio"
         });
         setRecording(false)
@@ -152,6 +175,7 @@ function page() {
     }
   }, [socket])
   const handleSendMessage = async (e) => {
+
     if (startBot) {
       if (questions.length <= questionindex) {
         setstartBot(false)
@@ -183,7 +207,26 @@ function page() {
 
 
  
+  const handleChatNow=async(e)=>{
+    try{
+      let res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/customer/login`,{phone:phonenumber});
+      setuserDetail(res.data.customer)
+      console.log("this is the response from the user ",res)
+      if(res){
+        if(res.data.customer.messages && res.data.customer.messages!=[]){
+          setMessages((prev) => [...prev,...res.data.customer.messages])
 
+        }
+      }
+
+      setLoadingHide(true);
+    }
+    catch(err){
+      console.log(err)
+
+    }
+    
+  }
 
   return (
     // this is thediv
@@ -198,9 +241,11 @@ function page() {
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
              <FaWhatsapp className='w-5 h-5'/>
             </div>
-            <input type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your what's app"/>
+            <input type="text" value={name} onChange={(e)=>setname(e.target.value)} id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your what's app"/>
+           
+            <input type="text" value={phonenumber} onChange={(e)=>setphonenumber(e.target.value)} id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your what's app"/>
           </div>
-          <button className='py-2 px-4 rounded-3xl bg-white text-[#330867]' onClick={() => setLoadingHide(true)}>Chat Now !</button>
+          <button className='py-2 px-4 rounded-3xl bg-white text-[#330867]' onClick={handleChatNow}>Chat Now !</button>
         </div>
       }
 

@@ -19,6 +19,7 @@ const [disclaimer, setdisclaimer] = useState(false)
 const [disclaimerTitle, setdisclaimerTitle] = useState("")
 const [disclaimerMsg, setdisclaimerMsg] = useState("")
 const [currentTime, setCurrentTime] = useState(new Date());
+const [isRecording, setisRecording] = useState(false)
 
 useEffect(() => {
   const intervalId = setInterval(() => {
@@ -317,6 +318,7 @@ const isBetween2PMAnd1130PM = () => {
 
                     {
                         messages.map((msg) => {
+                            if(!msg){return ''}
                             if (msg.status == "options") {
                                 const Component = buttons[msg.msg];
                                 console.log(Component)
@@ -476,7 +478,7 @@ const isBetween2PMAnd1130PM = () => {
                 <button class="bg-gradient font-bold text-white p-2 md:py-3 md:px-4 rounded-full md:rounded text-sm md:text-4xl" onClick={handleSendMessage}>
                     <IoSend />
                 </button>
-                <button class="bg-gradient font-bold text-white p-2 md:py-3 md:px-4 rounded-full md:rounded text-sm md:text-4xl" onClick={startRecording}>
+                <button class={`bg-gradient font-bold p-2 md:py-3 md:px-4 rounded-full md:rounded text-sm md:text-4xl ${isRecording?" text-red-500":"text-white"}`} onClick={()=>{ startRecording();setisRecording(!isRecording)}}>
                     <FaMicrophone />
                 </button>
             </div>
