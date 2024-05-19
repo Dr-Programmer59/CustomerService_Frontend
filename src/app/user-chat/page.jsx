@@ -34,16 +34,7 @@ function page() {
   const mediaRecorder=useRef();
 
 
-  useEffect(() => {
-    const startBotChatting = async () => {
-      await setTypeAnimationAndSendMessage(questions[0], 0, 2000);
-      await setTypeAnimationAndSendMessage(questions[1], 1, 2000);
-
-
-    };
-
-    startBotChatting();
-  }, []);
+  
 
 
  useEffect(() => {
@@ -67,8 +58,8 @@ function page() {
 
  }, [messages])
  
-  const setTypeAnimationAndSendMessage = async (message, index, delay) => {
-    setquestionindex(index)
+  const setTypeAnimationAndSendMessage = async (message, delay) => {
+    
     settypingAnimation(true);
     await wait(delay);
     settypingAnimation(false);
@@ -80,12 +71,7 @@ function page() {
     await wait(delay);
   };
 
-  useEffect(() => {
 
-    if (messages.length == 5) {
-      setMessages((prev) => [...prev, { msg: "options", status: "options" }]);
-    }
-  }, [messages])
 
   const sendQuestions = async (questions) => {
     for (const question of questions) {
@@ -176,19 +162,7 @@ function page() {
   }, [socket])
   const handleSendMessage = async (e) => {
 
-    if (startBot) {
-      if (questions.length <= questionindex) {
-        setstartBot(false)
-        return
-      }
-
-      setanswers((prev) => [...prev, message]);
-      setMessages((prev) => [...prev, { msg: message, status: "outgoing" }])
-      setmessage("")
-
-      await setTypeAnimationAndSendMessage(questions[questionindex + 1], questionindex + 1, 2000);
-    }
-    else {
+ 
       e.preventDefault();
       if (imageSrc) {
         socket.emit("send-msg", { message, socketId: socket.id, role: "customer", msgType: "img", imageData: imageSrc })
@@ -202,7 +176,7 @@ function page() {
       }
       setmessage("")
       setImageSrc(null)
-    }
+    
   }
 
 
@@ -220,6 +194,13 @@ function page() {
       }
 
       setLoadingHide(true);
+      settypingAnimation(true)
+      setTimeout(() => {
+      setMessages((prev) => [...prev, { msg: "options", status: "options" }]);
+      settypingAnimation(false)
+        
+      }, 2000);
+
     }
     catch(err){
       console.log(err)
@@ -260,7 +241,7 @@ function page() {
       <div class="  shadow-lg  bg-white p-4">
 
 
-        <MessageBox messages={messages} typingAnimation={typingAnimation} setMessages={setMessages} message={message} setmessage={setmessage} handleSendMessage={handleSendMessage} audioBlob={audioBlob} startRecording={startRecording} sendQuestions={sendQuestions} socket={socket} answers={answers} imageSrc={imageSrc} setImageSrc={setImageSrc} startBot={startBot} setstartBot={setstartBot} />
+        <MessageBox messages={messages} typingAnimation={typingAnimation} setMessages={setMessages} message={message} setmessage={setmessage} handleSendMessage={handleSendMessage} audioBlob={audioBlob} startRecording={startRecording} sendQuestions={sendQuestions} socket={socket} answers={[phonenumber,"C"]} imageSrc={imageSrc} setImageSrc={setImageSrc} startBot={startBot} setstartBot={setstartBot} />
 
 
       </div>

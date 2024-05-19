@@ -10,7 +10,7 @@ import axios from 'axios';
 // admin bank details 
 
 
-function MessageBox({ messages, typingAnimation, message, setmessage, handleSendMessage, startRecording, sendQuestions, setMessages, answers, socket, imageSrc, setImageSrc, startBot, setstartBot }) {
+function MessageBox({ messages, typingAnimation, message, setmessage, handleSendMessage, startRecording, sendQuestions, setMessages, answers, socket, imageSrc, setImageSrc, startBot, setstartBot ,role}) {
     const messagesEndRef = useRef(null);
     const [userBankDetails, setUserBankDetails] = useState([]);
     const [adminBankDetails, setadminBankDetails] = useState({})
@@ -266,11 +266,13 @@ const isBetween2PMAnd1130PM = () => {
         </div>),
         "deposit": () =>
         (<div class="flex justify-start mb-4">
-            <img
+           
+           <img
                 src="Images/bot.png"
                 class="object-cover h-10 w-10 rounded-full"
                 alt=""
             />
+           
             <div
                 class="ml-2 py-3 px-4 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white"
             >
@@ -329,11 +331,21 @@ const isBetween2PMAnd1130PM = () => {
                             }
                             else if (msg.status == "incoming") {
                                 return <div class="flex justify-start mb-4">
-                                    <img
-                                        src="Images/bot.png"
-                                        class="object-cover h-10 w-10 rounded-full"
-                                        alt=""
-                                    />
+                                   {role && role=="employee"?
+        
+        <div
+  class={`h-12 w-12 p-2 bg-green-500 rounded-full text-white font-semibold flex items-center justify-center`}
+>
+          C
+        </div>
+
+ :
+ <img
+      src="Images/bot.png"
+      class="object-cover h-10 w-10 rounded-full"
+      alt=""
+  />
+ } 
                                     <div
                                         class="ml-2 p-2 space-y-3 md:py-3 md:px-4 text-black/80 shadow-md rounded-br-3xl rounded-tr-3xl rounded-tl-xl "
                                     >

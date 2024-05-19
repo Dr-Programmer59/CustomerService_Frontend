@@ -199,11 +199,11 @@ function page() {
   
         const audioURL = URL.createObjectURL(audioBlob);
         updatedMsgInfo[data.socketId].messages.push({ msg: audioURL, status: "incoming",imageData:data.imageData,msgType:data.msgType });
-        updateMessages(currentCustomer,data.name,{ msg: audioURL, status: "incoming",imageData:data.imageData,msgType:data.msgType })
+        updateMessages(data.socketId,data.name,{ msg: audioURL, status: "incoming",imageData:data.imageData,msgType:data.msgType })
       }
       else{
        updatedMsgInfo[data.socketId].messages.push({ msg: data.message, status: "incoming",imageData:data.imageData,msgType:data.msgType });
-       updateMessages(currentCustomer,data.name,{ msg: data.message, status: "incoming",imageData:data.imageData,msgType:data.msgType })
+       updateMessages(data.socketId,data.name,{ msg: data.message, status: "incoming",imageData:data.imageData,msgType:data.msgType })
       }
      
       return updatedMsgInfo; 
@@ -228,9 +228,9 @@ function page() {
           </div>
           
           <div
-            class={`h-12 w-12 p-2  ${getRandomFromArray(['bg-yellow-500','bg-green-500',"bg-red-500","bg-gray-500"])} rounded-full text-white font-semibold flex items-center justify-center`}
+            class={`h-12 w-12 p-2  bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center`}
           >
-            RA
+           {user.name[0].toUpperCase()}
           </div>
         </div>
 
@@ -257,7 +257,7 @@ function page() {
                   <div
             class={`h-12 w-12 p-2 bg-green-500 rounded-full text-white font-semibold flex items-center justify-center`}
           >
-                    {value.customerName[0].toUpperCase()}
+                    C
                   </div>
                   </div>
                   <div class="w-full" data-key={key}>
@@ -284,7 +284,7 @@ function page() {
        
           <div className='w-full'>
           {
-            msginfo[currentCustomer] && <MessageBox messages={msginfo[currentCustomer].messages} setMessages={setmsginfo} typingAnimation={typingAnimation}  message={message} setmessage={setmessage} handleSendMessage={handleSendMessage} startRecording={startRecording} imageSrc={imageSrc} setImageSrc={setImageSrc}/>
+            msginfo[currentCustomer] && <MessageBox messages={msginfo[currentCustomer].messages} setMessages={setmsginfo} typingAnimation={typingAnimation}  message={message} setmessage={setmessage} handleSendMessage={handleSendMessage} startRecording={startRecording} imageSrc={imageSrc} setImageSrc={setImageSrc} role={"employee"}/>
           }
      
           </div>
