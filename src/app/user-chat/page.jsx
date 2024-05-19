@@ -241,7 +241,6 @@ function page() {
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
              <FaWhatsapp className='w-5 h-5'/>
             </div>
-            <input type="text" value={name} onChange={(e)=>setname(e.target.value)} id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your what's app"/>
            
             <input type="text" value={phonenumber} onChange={(e)=>setphonenumber(e.target.value)} id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your what's app"/>
           </div>
